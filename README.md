@@ -92,3 +92,40 @@ today.
   reports invited. Changes are proposed by issue or pull request
   against `docs/`; the versioning policy is Section 12 of the
   spec.
+
+## Start from a template
+
+Agents that check before payment from their first commit — pick
+your birthplace:
+
+- **OpenAI Agents SDK starter** —
+  [provecart/shopping-agent-starter](https://github.com/provecart/shopping-agent-starter):
+  template repo with the check tool, the MATCH-gated payment tool,
+  and the certification exam wired into release CI. Run it in your
+  browser: [StackBlitz](https://stackblitz.com/github/provecart/shopping-agent-starter) ·
+  [CodeSandbox](https://codesandbox.io/s/github/provecart/shopping-agent-starter) ·
+  [Replit](https://replit.com/github/provecart/shopping-agent-starter)
+- **Raw MCP starter** —
+  [provecart/mcp-shopping-agent-starter](https://github.com/provecart/mcp-shopping-agent-starter):
+  framework-free MCP client that signs itself up keylessly and
+  takes the live exam. Run it in your browser:
+  [StackBlitz](https://stackblitz.com/github/provecart/mcp-shopping-agent-starter) ·
+  [CodeSandbox](https://codesandbox.io/s/github/provecart/mcp-shopping-agent-starter) ·
+  [Replit](https://replit.com/github/provecart/mcp-shopping-agent-starter)
+- **Cookiecutter template** — generate a fresh project (name,
+  provider — OpenAI or Anthropic — and an optional MCP companion):
+
+  ```bash
+  pip install cookiecutter
+  cookiecutter gh:provecart/provecart --directory templates/cookiecutter-shopping-agent
+  ```
+
+  The generated project runs its offline demo with no keys:
+  `python shopping_agent.py` walks BLOCK → fix → MATCH → payment
+  gate against a local mock with the real response shape.
+
+- **PyPI packages** —
+  [`provecart`](https://pypi.org/project/provecart/) (the client
+  library) and
+  [`provecart-exam`](https://pypi.org/project/provecart-exam/)
+  (the one-command exam runner above).
