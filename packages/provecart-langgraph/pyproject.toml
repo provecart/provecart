@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "provecart-langgraph"
+version = "0.1.0"
+description = "ProveCart pre-payment check for LangGraph: a StateGraph node and a purchase-tool guard that verify a cart, booking or reservation against the customer's mandate before payment."
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+keywords = ["ai-agents", "langgraph", "agent-commerce", "guardrails", "provecart"]
+classifiers = [
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+]
+# Loose by design: the node is a plain state->dict function, so
+# langgraph itself and the 'provecart' client are optional extras.
+[project.optional-dependencies]
+client = ["provecart>=0.1.0"]
+langgraph = ["langgraph"]
+test = ["pytest"]
+
+[project.urls]
+Homepage = "https://provecart.com"
+Repository = "https://github.com/provecart/provecart"
+
+[tool.setuptools.packages.find]
+where = ["src"]
