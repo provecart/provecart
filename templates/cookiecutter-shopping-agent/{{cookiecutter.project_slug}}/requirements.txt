@@ -1,0 +1,4 @@
+{% if cookiecutter.provider == "openai" %}openai-agents>=0.2
+{% else %}anthropic>=0.40
+{% endif %}{% if cookiecutter.use_mcp %}mcp>=1.2
+{% endif %}
