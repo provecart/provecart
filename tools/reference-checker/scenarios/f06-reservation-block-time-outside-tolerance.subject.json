@@ -1,0 +1,19 @@
+{
+  "mandate_id": "fixture-reservation-mandate",
+  "merchant": {
+    "name": "ResPlatform",
+    "domain": "res.example.com"
+  },
+  "provider_name": "Chez Nous",
+  "location": {
+    "name": "Chez Nous Downtown",
+    "city": "San Francisco"
+  },
+  "date": "2026-12-10",
+  "time": "19:30",
+  "party_size": 4,
+  "name_on_reservation": "Jordan Lee",
+  "deposit_amount": 0.0,
+  "total_amount": 150.0,
+  "currency": "USD"
+}

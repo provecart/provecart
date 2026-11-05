@@ -1,0 +1,17 @@
+{
+  "user_id": "fixture-buyer",
+  "service_description": "Dinner",
+  "provider_name": "Chez Nous",
+  "location": {
+    "name": "Chez Nous Downtown",
+    "city": "San Francisco"
+  },
+  "date": "2026-12-10",
+  "time": "19:00",
+  "time_tolerance_minutes": 15,
+  "party_size": 4,
+  "name_on_reservation": "Jordan Lee",
+  "max_deposit": 50,
+  "max_total_price": 300,
+  "expires_at": "2026-12-05T00:00:00Z"
+}

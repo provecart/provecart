@@ -1,0 +1,24 @@
+{
+  "user_id": "fixture-buyer",
+  "travelers": [
+    {
+      "name": "Maria Elena Garcia"
+    }
+  ],
+  "origin": {
+    "airport": "SFO"
+  },
+  "destination": {
+    "airport": "JFK"
+  },
+  "departure_date": "2026-12-10",
+  "return_date": "2026-12-15",
+  "cabin": "economy",
+  "fare_terms": {
+    "refundability": "refundable_required",
+    "max_change_fee": 75
+  },
+  "max_total_price": 900,
+  "price_basis": "all_in",
+  "expires_at": "2026-12-05T00:00:00Z"
+}

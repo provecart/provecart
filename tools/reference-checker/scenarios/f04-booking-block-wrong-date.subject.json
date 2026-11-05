@@ -1,0 +1,41 @@
+{
+  "mandate_id": "fixture-booking-mandate",
+  "merchant": {
+    "name": "AirSeller",
+    "domain": "air.example.com"
+  },
+  "travelers": [
+    "Maria Elena Garcia"
+  ],
+  "legs": [
+    {
+      "carrier": "UA",
+      "flight_number": "UA100",
+      "from_airport": "SFO",
+      "to_airport": "JFK",
+      "depart_at": "2026-12-11T08:00:00-08:00",
+      "arrive_at": "2026-12-11T16:30:00-05:00"
+    },
+    {
+      "carrier": "UA",
+      "flight_number": "UA101",
+      "from_airport": "JFK",
+      "to_airport": "SFO",
+      "depart_at": "2026-12-15T09:00:00-05:00",
+      "arrive_at": "2026-12-15T12:30:00-08:00"
+    }
+  ],
+  "fare": {
+    "cabin": "economy",
+    "refundability": "refundable",
+    "change_fee": 0
+  },
+  "price": {
+    "total": 640.0,
+    "base_fare": 520.0,
+    "taxes": 90.0,
+    "carrier_fees": 30.0,
+    "ancillaries": 0.0
+  },
+  "currency": "USD"
+}

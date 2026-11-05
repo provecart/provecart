@@ -1,0 +1,16 @@
+{
+  "mandate_id": "fixture-cart-mandate",
+  "merchant": {
+    "name": "Example Shop",
+    "domain": "evil.example.com"
+  },
+  "items": [
+    {
+      "name": "Sony WH-1000XM5 Wireless Noise Cancelling Headphones",
+      "quantity": 1,
+      "unit_price": 279.0
+    }
+  ],
+  "total_price": 279.0,
+  "currency": "USD"
+}

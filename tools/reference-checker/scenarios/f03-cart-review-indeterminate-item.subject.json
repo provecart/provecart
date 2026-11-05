@@ -1,0 +1,16 @@
+{
+  "mandate_id": "fixture-cart-mandate",
+  "merchant": {
+    "name": "Example Shop",
+    "domain": "shop.example.com"
+  },
+  "items": [
+    {
+      "name": "BassPro Q9 Wireless Headphones",
+      "quantity": 1,
+      "unit_price": 189.0
+    }
+  ],
+  "total_price": 189.0,
+  "currency": "USD"
+}

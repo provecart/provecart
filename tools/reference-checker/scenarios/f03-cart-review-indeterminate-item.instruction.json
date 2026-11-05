@@ -1,0 +1,22 @@
+{
+  "user_id": "fixture-buyer",
+  "item_description": "Sony WH-1000XM5 wireless noise cancelling headphones",
+  "item_keywords": [
+    "sony",
+    "wh-1000xm5",
+    "headphones",
+    "noise",
+    "cancelling"
+  ],
+  "category": "electronics",
+  "max_total_price": 300.0,
+  "currency": "USD",
+  "merchant_allowlist": [
+    "shop.example.com"
+  ],
+  "merchant_blocklist": [
+    "evil.example.com"
+  ],
+  "max_quantity": 1,
+  "expires_at": "2026-12-05T00:00:00Z"
+}
