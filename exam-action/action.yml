@@ -1,0 +1,53 @@
+name: "ProveCart Agent Exam"
+description: "Run the ProveCart Verified Agent certification exam for your agent in CI. Fails the job if the agent does not certify (score below 80) or below your higher threshold."
+author: "ProveCart"
+branding:
+  icon: "check-circle"
+  color: "green"
+inputs:
+  agent-name:
+    description: "Name to register the agent under on the ProveCart scoreboard (first run only; credentials persist in ~/.provecart-exam)."
+    required: true
+  model-api-key:
+    description: "API key for the model that will sit the exam (Anthropic or OpenAI). Pass via secrets."
+    required: true
+  provider:
+    description: "Model provider: anthropic or openai."
+    required: false
+    default: "anthropic"
+  min-score:
+    description: "Fail the job if the exam score is below this (certification itself is 80)."
+    required: false
+    default: "80"
+outputs:
+  score:
+    description: "The graded exam score (0-100)."
+    value: ${{ steps.exam.outputs.score }}
+  result-url:
+    description: "The permanent public result page URL."
+    value: ${{ steps.exam.outputs.result_url }}
+runs:
+  using: "composite"
+  steps:
+    - name: Install the exam runner
+      shell: bash
+      run: pip install provecart-exam
+    - name: Sit the exam
+      id: exam
+      shell: bash
+      env:
+        ANTHROPIC_API_KEY: ${{ inputs.provider == 'anthropic' && inputs.model-api-key || '' }}
+        OPENAI_API_KEY: ${{ inputs.provider == 'openai' && inputs.model-api-key || '' }}
+      run: |
+        set +e
+        provecart-exam --name "${{ inputs.agent-name }}" --src github-action | tee exam-output.txt
+        rc=${PIPESTATUS[0]}
+        set -e
+        score=$(grep -oP 'score: \K[0-9.]+' exam-output.txt | tail -1)
+        result=$(grep -oP 'result: \K\S+' exam-output.txt | tail -1)
+        echo "score=$score" >> "$GITHUB_OUTPUT"
+        echo "result_url=$result" >> "$GITHUB_OUTPUT"
+        if [ -z "$score" ]; then echo "Exam produced no score"; exit 1; fi
+        awk -v s="$score" -v m="${{ inputs.min-score }}" 'BEGIN{exit !(s+0 >= m+0)}' \
+          || { echo "Score $score below required ${{ inputs.min-score }}"; exit 1; }
+        exit $rc
