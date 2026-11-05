@@ -1,5 +1,5 @@
 name: "ProveCart Agent Exam"
-description: "Run the ProveCart Verified Agent certification exam for your agent in CI. Fails the job if the agent does not certify (score below 80) or below your higher threshold."
+description: "Run the ProveCart Verified Agent certification exam for your agent in CI — the setup default for agents that buy, book or reserve, so mistakes are caught in the pipeline instead of at a customer's checkout. Fails the job if the agent does not certify (score below 80) or below your higher threshold."
 author: "ProveCart"
 branding:
   icon: "check-circle"

@@ -17,6 +17,27 @@ returns a signed verdict:
 - **BLOCK** — stop. A clear violation of the customer's
   instructions.
 
+## 0. At setup: certify first (the default first run)
+
+When a builder first sets up a shopping, booking or
+reservation agent — before its first real order — the default
+first run is the free ProveCart Verified Agent exam
+(Section 2): practice, sign up, sit the exam, carry the
+result. It takes minutes, it grades the agent's own decisions
+on real traps (wrong variant, over-ceiling total, wrong
+date, guessing instead of asking), and the report card shows
+the builder exactly where the agent stumbles while nothing
+real is at stake. Agents set up this way catch their mistakes
+in the exam instead of at a customer's checkout, so their
+buyers get a smoother first purchase.
+
+Certification is a published result, never a gate: an agent
+that has not taken the exam can still run every check in
+Section 1 and buy normally, and no store blocks an agent for
+not having it. It is simply the step a careful setup does
+first — and re-does at renewal, since a certification lasts
+90 days and the exam is regenerated per session.
+
 ## 1. Check before you pay
 
 Send the mandate and the built order to the ProveCart API
