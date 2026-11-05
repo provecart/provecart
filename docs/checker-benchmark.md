@@ -21,7 +21,7 @@ The trap categories cover the mistakes agents actually make:
 
 | Battery | Result | What it proves |
 |---|---|---|
-| Full endpoint and security battery (orders) | 59 of 59 checks passed | Core verdicts, capture gating, idempotency, tenant isolation, and every audit regression check named in the fix log below. |
+| Full endpoint and security battery (orders) | 60 of 60 checks passed | Core verdicts, capture gating, idempotency, tenant isolation, and every audit regression check named in the fix log below. |
 | Labeled booking and reservation cases | 74 of 74 cases agreed (48 bookings, 26 reservations) | Every seeded booking and reservation trap was caught with the right verdict class. |
 | Booking and reservation endpoint battery | 28 of 28 checks passed | Payment-capture and ticket-issuance gating, the correction loop, stale-verdict refusal, cross-type guards, and evidence-chain integrity across a restart. |
 | AI-layer wording battery | 120 of 120 wording REVIEWs cleared, each with written reasoning | The live AI layer resolves the known wording class of false REVIEWs (see Known limits). |
