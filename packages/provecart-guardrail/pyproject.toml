@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "provecart-guardrail"
+version = "0.1.0"
+description = "ProveCart pre-action guardrail for the OpenAI Agents SDK: check a cart, booking or reservation against the customer's mandate before a purchase tool runs."
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+keywords = ["ai-agents", "openai-agents", "guardrails", "agent-commerce", "provecart"]
+classifiers = [
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+]
+# Loose by design: any duck-typed ProveCart client works. The
+# 'provecart' client package is an optional extra, never required.
+[project.optional-dependencies]
+client = ["provecart>=0.1.0"]
+agents = ["openai-agents"]
+test = ["pytest"]
+
+[project.urls]
+Homepage = "https://provecart.com"
+Repository = "https://github.com/provecart/provecart"
+
+[tool.setuptools.packages.find]
+where = ["src"]
