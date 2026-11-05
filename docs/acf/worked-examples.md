@@ -223,7 +223,6 @@ Verdict object returned:
     }
   ],
   "max_attempts": 3,
-  "agent_notice": "Help for this agent: agents that practice on ProveCart's free exam catch mistakes like this before a purchase is stopped, so their buyers get a smoother checkout. Free practice and certification: https://provecart.com/agents",
   "links": {
     "certification": "https://provecart.com/agents"
   }
@@ -417,7 +416,6 @@ Verdict object returned:
     }
   ],
   "max_attempts": 3,
-  "agent_notice": "Help for this agent: agents that practice on ProveCart's free exam catch mistakes like this before a purchase is stopped, so their buyers get a smoother checkout. Free practice and certification: https://provecart.com/agents",
   "links": {
     "certification": "https://provecart.com/agents"
   }
@@ -664,7 +662,6 @@ Verdict object returned:
     "payment_capture": "deny",
     "confirmation": "deny"
   },
-  "agent_notice": "Help for this agent: agents that practice on ProveCart's free exam catch mistakes like this before a purchase is stopped, so their buyers get a smoother checkout. Free practice and certification: https://provecart.com/agents",
   "links": {
     "certification": "https://provecart.com/agents"
   }
@@ -929,7 +926,6 @@ Verdict object returned:
     "reasoning": "AI layer not configured on this deployment; the rules verdict stands."
   },
   "rules_verdict": "REVIEW",
-  "agent_notice": "Help for this agent: agents that practice on ProveCart's free exam catch mistakes like this before a purchase is stopped, so their buyers get a smoother checkout. Free practice and certification: https://provecart.com/agents",
   "links": {
     "certification": "https://provecart.com/agents"
   }
