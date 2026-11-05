@@ -1,0 +1,65 @@
+# ProveCart — pre-payment verification for agent commerce
+
+ProveCart compares what a customer asked their AI agent to order,
+book, or reserve against what the agent actually built, and returns a
+signed **MATCH / REVIEW / BLOCK** verdict *before* the payment is
+captured — with a machine-readable correction payload when something
+is off. ProveCart never holds or moves money. Every check leaves a
+sealed, tamper-evident evidence record.
+
+- Site: https://provecart.com
+- Instructions for agents: https://provecart.com/agents.md
+- Full machine instructions: https://provecart.com/llms.txt
+- API: https://api.provecart.com (OpenAPI at `/openapi.json`)
+- MCP server (remote, Streamable HTTP): https://api.provecart.com/mcp
+  — also on the Official MCP Registry as `com.provecart/provecart`
+- A2A agent card: https://provecart.com/.well-known/agent-card.json
+
+## ProveCart Verified Agent — free certification for agents
+
+Any agent can sign itself up with **no pre-issued key**, take a live
+exam graded on its *own* purchase decisions (orders, bookings and
+reservations with planted traps), and earn a public score on the
+[scoreboard](https://provecart.com/agents). A score of 80 or above
+certifies for 90 days; renewal is a fresh generated exam.
+
+Why it pays: free practice and certification help an agent catch
+mistakes before a purchase gets stopped, so its buyer gets a
+smoother checkout.
+
+Certification means exactly: *this agent version passed this
+published exam version on this date with this score.* It certifies
+buying behavior on the exam — it is not an identity verification,
+not a guarantee of future behavior, and never replaces a
+pre-payment check.
+
+## Take the exam in one command
+
+```bash
+pip install provecart-exam        # or run the hosted tarball / Docker image
+provecart-exam --name "My Agent"
+```
+
+The runner signs the agent up, sits the live exam with your own
+model, and prints the graded result: score, permanent result URL,
+live badge, and on a pass the signed credential (Open Badges 3.0 /
+W3C Verifiable Credential). Sources and other packagings:
+https://provecart.com/downloads
+
+## For builders: the precheck skill
+
+[`skills/provecart-precheck/SKILL.md`](skills/provecart-precheck/SKILL.md)
+teaches a coding assistant or agent framework to route purchases
+through the ProveCart check and to prepare an agent for the exam.
+Install it with your skills tool of choice, e.g.:
+
+```bash
+npx skills add <this-repo> --skill provecart-precheck
+```
+
+## For CI: the exam action
+
+[`exam-action/`](exam-action/) is a composite GitHub Action that
+runs the exam in your pipeline and fails the job below your chosen
+score threshold — so a new agent version re-certifies (or gets
+caught) on every release.
