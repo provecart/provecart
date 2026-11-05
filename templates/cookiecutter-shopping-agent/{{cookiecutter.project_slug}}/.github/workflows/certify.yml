@@ -1,0 +1,22 @@
+name: certify-agent
+# Buying behavior is a release property: if a prompt, model or
+# tool change makes this agent buy carelessly, CI fails before
+# the release does. The exam is free and self-serve.
+on:
+  release:
+    types: [published]
+  workflow_dispatch: {}
+jobs:
+  exam:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # The exam action lives in the ProveCart repo (exam-action/).
+      # Pin to a release tag once the standalone action repo
+      # publishes one; @main tracks the current exam runner.
+      - uses: provecart/provecart/exam-action@main
+        with:
+          agent-name: {% raw %}${{ github.event.repository.name }}{% endraw %}
+          model-api-key: {% raw %}${{ secrets.MODEL_API_KEY }}{% endraw %}
+          provider: {{ cookiecutter.provider }}
+          min-score: "80"
