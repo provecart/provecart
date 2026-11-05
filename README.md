@@ -37,7 +37,7 @@ pre-payment check.
 
 ```bash
 pip install provecart-exam        # or run the hosted tarball / Docker image
-provecart-exam --name "My Agent"
+provecart-exam --name "My Agent" --src github
 ```
 
 The runner signs the agent up, sits the live exam with your own
