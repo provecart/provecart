@@ -1,0 +1,87 @@
+<!doctype html>
+<!-- Local demo store page for the ProveCart x Stagehand example.
+     This page is the entire "merchant": it is served from disk
+     (file://) or any static server, holds its cart in page state,
+     and its Buy button only records that it was clicked. No real
+     store, no real purchase, no network. -->
+<html lang="en">
+<head><meta charset="utf-8"><title>Demo Store - Trail Runner Shoes</title></head>
+<body>
+  <h1>Demo Store</h1>
+  <section id="product">
+    <h2>Trail Runner Shoes</h2>
+    <p>Price: $<span id="price">110</span></p>
+    <label>Size
+      <select id="size">
+        <option>US 9</option>
+        <option>US 10</option>
+        <option>US 11</option>
+      </select>
+    </label>
+    <label>Quantity <input id="qty" type="number" value="1" min="1"></label>
+    <button id="add">Add to cart</button>
+  </section>
+  <section id="also">
+    <h2>Leather Wallet</h2>
+    <p>Price: $<span id="wallet-price">45</span></p>
+    <button id="add-wallet">Add wallet to cart</button>
+  </section>
+  <section id="cart">
+    <h2>Cart</h2>
+    <ul id="cart-items"></ul>
+    <p>Total: $<span id="total">0</span></p>
+    <button id="buy">Buy</button>
+    <p id="buy-status">not purchased</p>
+  </section>
+  <script>
+    window.__cart = [];
+    function render() {
+      var ul = document.getElementById('cart-items');
+      ul.innerHTML = '';
+      var total = 0;
+      window.__cart.forEach(function (it) {
+        var li = document.createElement('li');
+        li.textContent = it.name + ' | ' + (it.variant || '') + ' | qty ' + it.quantity + ' | $' + it.unit_price;
+        ul.appendChild(li);
+        total += it.unit_price * it.quantity;
+      });
+      document.getElementById('total').textContent = total;
+    }
+    document.getElementById('add').addEventListener('click', function () {
+      window.__cart.push({
+        name: 'Trail Runner Shoes',
+        variant: document.getElementById('size').value,
+        quantity: Number(document.getElementById('qty').value),
+        unit_price: 110, category: 'footwear', brand: 'Demo'
+      });
+      render();
+    });
+    document.getElementById('add-wallet').addEventListener('click', function () {
+      window.__cart.push({
+        name: 'Leather Wallet', variant: '', quantity: 1,
+        unit_price: 45, category: 'accessories', brand: 'Demo'
+      });
+      render();
+    });
+    document.getElementById('buy').addEventListener('click', function () {
+      document.getElementById('buy-status').textContent = 'PURCHASED (demo)';
+    });
+    window.__setVariant = function (name, variant) {
+      window.__cart.forEach(function (it) { if (it.name === name) it.variant = variant; });
+      render();
+    };
+    window.__setQuantity = function (name, qty) {
+      window.__cart.forEach(function (it) { if (it.name === name) it.quantity = qty; });
+      render();
+    };
+    window.__readCart = function () {
+      var total = window.__cart.reduce(function (s, it) { return s + it.unit_price * it.quantity; }, 0);
+      return {
+        merchant: { name: 'Demo Store', domain: 'demo.local' },
+        items: window.__cart, total_price: total, currency: 'USD',
+        tax: 0, shipping: 0, fees: 0
+      };
+    };
+  </script>
+</body>
+</html>
