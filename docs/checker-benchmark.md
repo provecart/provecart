@@ -29,7 +29,7 @@ The trap categories cover the mistakes agents actually make:
 | AI-layer BLOCK passthrough | 41 of 41 BLOCK cases still BLOCK, with no AI adjudication attached | The AI layer never runs on, and can never overturn, a BLOCK. |
 | AI-layer failure modes | 52 of 52 cases identical to AI-off in each of three failure states; 8 of 8 identical under timeout | Provider down, provider error, or low confidence leaves the rules verdict standing. |
 | AI intake battery | 54 of 54 extracted fields correct; 0 invented values | Free-text instructions are read into a draft without inventing fields the customer never stated. |
-| Good-order stress spot-check | 20,000 good orders: 0 false BLOCKs; 97.65% MATCH; 2.35% false REVIEWs (470 orders) | Good orders are not blocked. The false REVIEWs are the wording class described under Known limits. |
+| Good-order stress spot-check | 20,000 good orders: 0 false BLOCKs; 97.65% MATCH; 2.35% false REVIEWs (471 orders) | Good orders are not blocked. The false REVIEWs are the wording class described under Known limits. |
 
 Source: local run, November 4, 2026, against the current production engine build. The stress spot-check uses the same generator and seed as the recorded 100,000-order baseline below, bounded to 20,000 orders.
 
