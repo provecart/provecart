@@ -63,3 +63,32 @@ npx skills add <this-repo> --skill provecart-precheck
 runs the exam in your pipeline and fails the job below your chosen
 score threshold — so a new agent version re-certifies (or gets
 caught) on every release.
+
+## Agent Correction Format (ACF) — open proposal
+
+ProveCart publishes the **Agent Correction Format (ACF) v0.1**, an
+open proposal for the machine-readable correction payload a
+checker returns with a REVIEW or BLOCK verdict: per failed
+dimension, the action to take, the expected value, the actual
+value, and the reason — plus the retry contract (resubmission as a
+new check against the same signed instructions, bounded attempts),
+buyer-approval escalation for any fix beyond what the buyer
+authorized, and the sealed evidence pointer with its single-use
+verdict token rule. It is the format the ProveCart API speaks
+today.
+
+- Spec page: https://provecart.com/standards/correction-format
+- Spec in this repo: `docs/agent-correction-format-v0.1.md`
+- Worked examples (four complete, unelided checks):
+  `docs/acf/worked-examples.md`, machine-readable copies in
+  `docs/acf/examples/`
+- Implementer guide (producer and consumer checklists, retry
+  budget, buyer-escalation rule, versioning policy):
+  `docs/acf/implementer-guide.md`
+- Test vectors (15 conformance vectors for third-party
+  implementations): `docs/acf/test-vectors.json`
+- Status: proposal, v0.1 (errata 2026-11-05 restored the end of
+  Section 10 and Sections 11–12) — adoption and implementation
+  reports invited. Changes are proposed by issue or pull request
+  against `docs/`; the versioning policy is Section 12 of the
+  spec.

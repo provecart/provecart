@@ -1,0 +1,1030 @@
+{
+  "format": "ACF test vectors",
+  "acf_version": "0.1",
+  "generated": "2026-11-05, from the reference implementation (production code) on a local test instance",
+  "how_to_run": [
+    "For each vector: create the instruction reference (mandate) with your implementation's mandate-creation call, then submit the subject with a verify call.",
+    "Conformance for a vector: the verdict matches exactly, AND the set of (dimension, action) pairs in the response's corrections array matches exactly (order does not matter; expected/actual values inside each correction are informative and may differ in formatting).",
+    "failing_codes_reference_only records the reference implementation's internal per-dimension reason codes. Codes are NOT part of ACF v0.1; they are included so implementers can compare semantics. Do not gate conformance on them.",
+    "expires_at values are normalized: 2027-01-01T00:00:00Z means 'valid, comfortably in the future'; 2020-01-01T00:00:00Z (V07 only) means 'already expired'.",
+    "MATCH vectors must carry no corrections array. Non-correctable vectors (V06, V07) must carry no corrections for the failed dimension and must mark that dimension correctable: false in results.",
+    "max_attempts is present in a response only when corrections are emitted; on MATCH vectors the expected value is therefore null."
+  ],
+  "vectors": [
+    {
+      "id": "V01",
+      "kind": "cart",
+      "description": "Exact match: right item, quantity, price within ceiling",
+      "mandate": {
+        "user_id": "user-123",
+        "item_description": "Wireless noise cancelling over-ear headphones",
+        "item_keywords": [
+          "wireless",
+          "headphones",
+          "noise",
+          "cancelling"
+        ],
+        "category": "electronics",
+        "max_total_price": 300.0,
+        "currency": "USD",
+        "merchant_allowlist": [
+          "shop.example.com"
+        ],
+        "merchant_blocklist": [
+          "evil.example.com"
+        ],
+        "max_quantity": 1,
+        "expires_at": "2027-01-01T00:00:00Z"
+      },
+      "subject": {
+        "merchant": {
+          "name": "Example Shop",
+          "domain": "shop.example.com"
+        },
+        "items": [
+          {
+            "name": "Wireless Noise-Cancelling Headphones",
+            "variant": "black",
+            "quantity": 1,
+            "unit_price": 249.99
+          }
+        ],
+        "total_price": 249.99,
+        "currency": "USD"
+      },
+      "expected": {
+        "verdict": "MATCH",
+        "corrections": [],
+        "failing_codes_reference_only": [],
+        "max_attempts": null
+      }
+    },
+    {
+      "id": "V02",
+      "kind": "cart",
+      "description": "Right item and quantity, total over the ceiling",
+      "mandate": {
+        "user_id": "user-123",
+        "item_description": "Wireless noise cancelling over-ear headphones",
+        "item_keywords": [
+          "wireless",
+          "headphones",
+          "noise",
+          "cancelling"
+        ],
+        "category": "electronics",
+        "max_total_price": 300.0,
+        "currency": "USD",
+        "merchant_allowlist": [
+          "shop.example.com"
+        ],
+        "merchant_blocklist": [
+          "evil.example.com"
+        ],
+        "max_quantity": 1,
+        "expires_at": "2027-01-01T00:00:00Z"
+      },
+      "subject": {
+        "merchant": {
+          "name": "Example Shop",
+          "domain": "shop.example.com"
+        },
+        "items": [
+          {
+            "name": "Wireless Noise-Cancelling Headphones",
+            "variant": "black",
+            "quantity": 1,
+            "unit_price": 349.99
+          }
+        ],
+        "total_price": 349.99,
+        "currency": "USD"
+      },
+      "expected": {
+        "verdict": "BLOCK",
+        "corrections": [
+          {
+            "dimension": "price",
+            "action": "reduce_total"
+          }
+        ],
+        "failing_codes_reference_only": [
+          "PRICE_OVER_CEILING"
+        ],
+        "max_attempts": 3
+      }
+    },
+    {
+      "id": "V03",
+      "kind": "cart",
+      "description": "Wrong item, double quantity, total over ceiling",
+      "mandate": {
+        "user_id": "user-123",
+        "item_description": "Sony WH-1000XM5 wireless noise cancelling headphones",
+        "item_keywords": [
+          "sony",
+          "wh-1000xm5",
+          "wireless",
+          "headphones",
+          "noise",
+          "cancelling"
+        ],
+        "brand": "Sony",
+        "category": "electronics",
+        "max_total_price": 300.0,
+        "currency": "USD",
+        "merchant_allowlist": [
+          "shop.example.com"
+        ],
+        "max_quantity": 1,
+        "expires_at": "2027-01-01T00:00:00Z"
+      },
+      "subject": {
+        "merchant": {
+          "name": "Example Shop",
+          "domain": "shop.example.com"
+        },
+        "items": [
+          {
+            "name": "BassPro Q9 Wireless Headphones",
+            "variant": null,
+            "quantity": 2,
+            "unit_price": 189.0
+          }
+        ],
+        "total_price": 378.0,
+        "currency": "USD"
+      },
+      "expected": {
+        "verdict": "BLOCK",
+        "corrections": [
+          {
+            "dimension": "item_match",
+            "action": "replace_item"
+          },
+          {
+            "dimension": "price",
+            "action": "reduce_total"
+          },
+          {
+            "dimension": "quantity",
+            "action": "reduce_quantity"
+          }
+        ],
+        "failing_codes_reference_only": [
+          "ITEM_INDETERMINATE",
+          "PRICE_OVER_CEILING",
+          "QUANTITY_OVER_MAX"
+        ],
+        "max_attempts": 3
+      }
+    },
+    {
+      "id": "V04",
+      "kind": "cart",
+      "description": "Variant mismatch: white submitted, black instructed",
+      "mandate": {
+        "user_id": "user-123",
+        "item_description": "Wireless noise cancelling over-ear headphones",
+        "item_keywords": [
+          "wireless",
+          "headphones",
+          "noise",
+          "cancelling"
+        ],
+        "category": "electronics",
+        "max_total_price": 300.0,
+        "currency": "USD",
+        "merchant_allowlist": [
+          "shop.example.com"
+        ],
+        "merchant_blocklist": [
+          "evil.example.com"
+        ],
+        "max_quantity": 1,
+        "expires_at": "2027-01-01T00:00:00Z",
+        "variant_constraints": {
+          "color": "black"
+        }
+      },
+      "subject": {
+        "merchant": {
+          "name": "Example Shop",
+          "domain": "shop.example.com"
+        },
+        "items": [
+          {
+            "name": "Wireless Noise-Cancelling Headphones",
+            "variant": "white",
+            "quantity": 1,
+            "unit_price": 249.99
+          }
+        ],
+        "total_price": 249.99,
+        "currency": "USD"
+      },
+      "expected": {
+        "verdict": "REVIEW",
+        "corrections": [
+          {
+            "dimension": "variant",
+            "action": "change_variant"
+          }
+        ],
+        "failing_codes_reference_only": [
+          "VARIANT_MISMATCH"
+        ],
+        "max_attempts": 3
+      }
+    },
+    {
+      "id": "V05",
+      "kind": "cart",
+      "description": "Quantity over the mandate maximum (3 against max 1)",
+      "mandate": {
+        "user_id": "user-123",
+        "item_description": "Wireless noise cancelling over-ear headphones",
+        "item_keywords": [
+          "wireless",
+          "headphones",
+          "noise",
+          "cancelling"
+        ],
+        "category": "electronics",
+        "max_total_price": 300.0,
+        "currency": "USD",
+        "merchant_allowlist": [
+          "shop.example.com"
+        ],
+        "merchant_blocklist": [
+          "evil.example.com"
+        ],
+        "max_quantity": 1,
+        "expires_at": "2027-01-01T00:00:00Z"
+      },
+      "subject": {
+        "merchant": {
+          "name": "Example Shop",
+          "domain": "shop.example.com"
+        },
+        "items": [
+          {
+            "name": "Wireless Noise-Cancelling Headphones",
+            "variant": "black",
+            "quantity": 3,
+            "unit_price": 50.0
+          }
+        ],
+        "total_price": 150.0,
+        "currency": "USD"
+      },
+      "expected": {
+        "verdict": "REVIEW",
+        "corrections": [
+          {
+            "dimension": "quantity",
+            "action": "reduce_quantity"
+          }
+        ],
+        "failing_codes_reference_only": [
+          "QUANTITY_OVER_MAX"
+        ],
+        "max_attempts": 3
+      }
+    },
+    {
+      "id": "V06",
+      "kind": "cart",
+      "description": "Merchant on the blocklist: non-correctable failure",
+      "mandate": {
+        "user_id": "user-123",
+        "item_description": "Wireless noise cancelling over-ear headphones",
+        "item_keywords": [
+          "wireless",
+          "headphones",
+          "noise",
+          "cancelling"
+        ],
+        "category": "electronics",
+        "max_total_price": 300.0,
+        "currency": "USD",
+        "merchant_allowlist": [
+          "shop.example.com"
+        ],
+        "merchant_blocklist": [
+          "evil.example.com"
+        ],
+        "max_quantity": 1,
+        "expires_at": "2027-01-01T00:00:00Z"
+      },
+      "subject": {
+        "merchant": {
+          "name": "Evil",
+          "domain": "evil.example.com"
+        },
+        "items": [
+          {
+            "name": "Wireless Noise-Cancelling Headphones",
+            "variant": "black",
+            "quantity": 1,
+            "unit_price": 249.99
+          }
+        ],
+        "total_price": 249.99,
+        "currency": "USD"
+      },
+      "expected": {
+        "verdict": "BLOCK",
+        "corrections": [],
+        "failing_codes_reference_only": [
+          "MERCHANT_EXCLUDED"
+        ],
+        "max_attempts": null
+      }
+    },
+    {
+      "id": "V07",
+      "kind": "cart",
+      "description": "Expired instruction reference: non-correctable failure",
+      "mandate": {
+        "user_id": "user-123",
+        "item_description": "Wireless noise cancelling over-ear headphones",
+        "item_keywords": [
+          "wireless",
+          "headphones",
+          "noise",
+          "cancelling"
+        ],
+        "category": "electronics",
+        "max_total_price": 300.0,
+        "currency": "USD",
+        "merchant_allowlist": [
+          "shop.example.com"
+        ],
+        "merchant_blocklist": [
+          "evil.example.com"
+        ],
+        "max_quantity": 1,
+        "expires_at": "2020-01-01T00:00:00Z"
+      },
+      "subject": {
+        "merchant": {
+          "name": "Example Shop",
+          "domain": "shop.example.com"
+        },
+        "items": [
+          {
+            "name": "Wireless Noise-Cancelling Headphones",
+            "variant": "black",
+            "quantity": 1,
+            "unit_price": 249.99
+          }
+        ],
+        "total_price": 249.99,
+        "currency": "USD"
+      },
+      "expected": {
+        "verdict": "BLOCK",
+        "corrections": [],
+        "failing_codes_reference_only": [
+          "MANDATE_EXPIRED"
+        ],
+        "max_attempts": null
+      }
+    },
+    {
+      "id": "V08",
+      "kind": "booking",
+      "description": "Conforming round-trip booking",
+      "mandate": {
+        "user_id": "user-123",
+        "travelers": [
+          {
+            "name": "Maria Elena Garcia"
+          },
+          {
+            "name": "James Robert Smith"
+          }
+        ],
+        "origin": {
+          "airport": "SFO"
+        },
+        "destination": {
+          "airport": "JFK"
+        },
+        "acceptable_alternates_destination": [
+          "LGA"
+        ],
+        "departure_date": "2026-12-10",
+        "return_date": "2026-12-15",
+        "cabin": "economy",
+        "fare_terms": {
+          "refundability": "refundable_required",
+          "max_change_fee": 75
+        },
+        "max_connections": 1,
+        "min_connection_minutes": 45,
+        "max_layover_minutes": 360,
+        "max_total_price": 1200,
+        "price_basis": "all_in",
+        "expires_at": "2027-01-01T00:00:00Z"
+      },
+      "subject": {
+        "merchant": {
+          "name": "AirSeller",
+          "domain": "air.example.com"
+        },
+        "travelers": [
+          "Maria Elena Garcia",
+          "James Robert Smith"
+        ],
+        "legs": [
+          {
+            "carrier": "UA",
+            "flight_number": "UA100",
+            "from_airport": "SFO",
+            "to_airport": "JFK",
+            "depart_at": "2026-12-10T08:00:00-08:00",
+            "arrive_at": "2026-12-10T16:30:00-05:00"
+          },
+          {
+            "carrier": "UA",
+            "flight_number": "UA101",
+            "from_airport": "JFK",
+            "to_airport": "ORD",
+            "depart_at": "2026-12-15T09:00:00-05:00",
+            "arrive_at": "2026-12-15T11:00:00-06:00"
+          },
+          {
+            "carrier": "UA",
+            "flight_number": "UA102",
+            "from_airport": "ORD",
+            "to_airport": "SFO",
+            "depart_at": "2026-12-15T12:30:00-06:00",
+            "arrive_at": "2026-12-15T15:05:00-08:00"
+          }
+        ],
+        "fare": {
+          "cabin": "economy",
+          "refundability": "refundable",
+          "change_fee": 0
+        },
+        "price": {
+          "total": 980.0,
+          "base_fare": 800.0,
+          "taxes": 120.0,
+          "carrier_fees": 60.0,
+          "ancillaries": 0.0
+        },
+        "currency": "USD"
+      },
+      "expected": {
+        "verdict": "MATCH",
+        "corrections": [],
+        "failing_codes_reference_only": [],
+        "max_attempts": null
+      }
+    },
+    {
+      "id": "V09",
+      "kind": "booking",
+      "description": "Traveler name missing its middle name",
+      "mandate": {
+        "user_id": "user-123",
+        "travelers": [
+          {
+            "name": "Maria Elena Garcia"
+          },
+          {
+            "name": "James Robert Smith"
+          }
+        ],
+        "origin": {
+          "airport": "SFO"
+        },
+        "destination": {
+          "airport": "JFK"
+        },
+        "acceptable_alternates_destination": [
+          "LGA"
+        ],
+        "departure_date": "2026-12-10",
+        "return_date": "2026-12-15",
+        "cabin": "economy",
+        "fare_terms": {
+          "refundability": "refundable_required",
+          "max_change_fee": 75
+        },
+        "max_connections": 1,
+        "min_connection_minutes": 45,
+        "max_layover_minutes": 360,
+        "max_total_price": 1200,
+        "price_basis": "all_in",
+        "expires_at": "2027-01-01T00:00:00Z"
+      },
+      "subject": {
+        "merchant": {
+          "name": "AirSeller",
+          "domain": "air.example.com"
+        },
+        "travelers": [
+          "Maria Garcia",
+          "James Robert Smith"
+        ],
+        "legs": [
+          {
+            "carrier": "UA",
+            "flight_number": "UA100",
+            "from_airport": "SFO",
+            "to_airport": "JFK",
+            "depart_at": "2026-12-10T08:00:00-08:00",
+            "arrive_at": "2026-12-10T16:30:00-05:00"
+          },
+          {
+            "carrier": "UA",
+            "flight_number": "UA101",
+            "from_airport": "JFK",
+            "to_airport": "ORD",
+            "depart_at": "2026-12-15T09:00:00-05:00",
+            "arrive_at": "2026-12-15T11:00:00-06:00"
+          },
+          {
+            "carrier": "UA",
+            "flight_number": "UA102",
+            "from_airport": "ORD",
+            "to_airport": "SFO",
+            "depart_at": "2026-12-15T12:30:00-06:00",
+            "arrive_at": "2026-12-15T15:05:00-08:00"
+          }
+        ],
+        "fare": {
+          "cabin": "economy",
+          "refundability": "refundable",
+          "change_fee": 0
+        },
+        "price": {
+          "total": 980.0,
+          "base_fare": 800.0,
+          "taxes": 120.0,
+          "carrier_fees": 60.0,
+          "ancillaries": 0.0
+        },
+        "currency": "USD"
+      },
+      "expected": {
+        "verdict": "REVIEW",
+        "corrections": [
+          {
+            "dimension": "traveler_name",
+            "action": "correct_traveler_name"
+          }
+        ],
+        "failing_codes_reference_only": [
+          "TRAVELER_NAME_FORM_DIFFERENCE"
+        ],
+        "max_attempts": 3
+      }
+    },
+    {
+      "id": "V10",
+      "kind": "booking",
+      "description": "Outbound leg departs a day late",
+      "mandate": {
+        "user_id": "user-123",
+        "travelers": [
+          {
+            "name": "Maria Elena Garcia"
+          },
+          {
+            "name": "James Robert Smith"
+          }
+        ],
+        "origin": {
+          "airport": "SFO"
+        },
+        "destination": {
+          "airport": "JFK"
+        },
+        "acceptable_alternates_destination": [
+          "LGA"
+        ],
+        "departure_date": "2026-12-10",
+        "return_date": "2026-12-15",
+        "cabin": "economy",
+        "fare_terms": {
+          "refundability": "refundable_required",
+          "max_change_fee": 75
+        },
+        "max_connections": 1,
+        "min_connection_minutes": 45,
+        "max_layover_minutes": 360,
+        "max_total_price": 1200,
+        "price_basis": "all_in",
+        "expires_at": "2027-01-01T00:00:00Z"
+      },
+      "subject": {
+        "merchant": {
+          "name": "AirSeller",
+          "domain": "air.example.com"
+        },
+        "travelers": [
+          "Maria Elena Garcia",
+          "James Robert Smith"
+        ],
+        "legs": [
+          {
+            "carrier": "UA",
+            "flight_number": "UA100",
+            "from_airport": "SFO",
+            "to_airport": "JFK",
+            "depart_at": "2026-12-11T08:00:00-08:00",
+            "arrive_at": "2026-12-11T16:30:00-05:00"
+          },
+          {
+            "carrier": "UA",
+            "flight_number": "UA101",
+            "from_airport": "JFK",
+            "to_airport": "ORD",
+            "depart_at": "2026-12-15T09:00:00-05:00",
+            "arrive_at": "2026-12-15T11:00:00-06:00"
+          },
+          {
+            "carrier": "UA",
+            "flight_number": "UA102",
+            "from_airport": "ORD",
+            "to_airport": "SFO",
+            "depart_at": "2026-12-15T12:30:00-06:00",
+            "arrive_at": "2026-12-15T15:05:00-08:00"
+          }
+        ],
+        "fare": {
+          "cabin": "economy",
+          "refundability": "refundable",
+          "change_fee": 0
+        },
+        "price": {
+          "total": 980.0,
+          "base_fare": 800.0,
+          "taxes": 120.0,
+          "carrier_fees": 60.0,
+          "ancillaries": 0.0
+        },
+        "currency": "USD"
+      },
+      "expected": {
+        "verdict": "BLOCK",
+        "corrections": [
+          {
+            "dimension": "travel_dates",
+            "action": "change_travel_date"
+          }
+        ],
+        "failing_codes_reference_only": [
+          "DATE_MISMATCH"
+        ],
+        "max_attempts": 3
+      }
+    },
+    {
+      "id": "V11",
+      "kind": "booking",
+      "description": "All-in total over the ceiling",
+      "mandate": {
+        "user_id": "user-123",
+        "travelers": [
+          {
+            "name": "Maria Elena Garcia"
+          },
+          {
+            "name": "James Robert Smith"
+          }
+        ],
+        "origin": {
+          "airport": "SFO"
+        },
+        "destination": {
+          "airport": "JFK"
+        },
+        "acceptable_alternates_destination": [
+          "LGA"
+        ],
+        "departure_date": "2026-12-10",
+        "return_date": "2026-12-15",
+        "cabin": "economy",
+        "fare_terms": {
+          "refundability": "refundable_required",
+          "max_change_fee": 75
+        },
+        "max_connections": 1,
+        "min_connection_minutes": 45,
+        "max_layover_minutes": 360,
+        "max_total_price": 1200,
+        "price_basis": "all_in",
+        "expires_at": "2027-01-01T00:00:00Z"
+      },
+      "subject": {
+        "merchant": {
+          "name": "AirSeller",
+          "domain": "air.example.com"
+        },
+        "travelers": [
+          "Maria Elena Garcia",
+          "James Robert Smith"
+        ],
+        "legs": [
+          {
+            "carrier": "UA",
+            "flight_number": "UA100",
+            "from_airport": "SFO",
+            "to_airport": "JFK",
+            "depart_at": "2026-12-10T08:00:00-08:00",
+            "arrive_at": "2026-12-10T16:30:00-05:00"
+          },
+          {
+            "carrier": "UA",
+            "flight_number": "UA101",
+            "from_airport": "JFK",
+            "to_airport": "ORD",
+            "depart_at": "2026-12-15T09:00:00-05:00",
+            "arrive_at": "2026-12-15T11:00:00-06:00"
+          },
+          {
+            "carrier": "UA",
+            "flight_number": "UA102",
+            "from_airport": "ORD",
+            "to_airport": "SFO",
+            "depart_at": "2026-12-15T12:30:00-06:00",
+            "arrive_at": "2026-12-15T15:05:00-08:00"
+          }
+        ],
+        "fare": {
+          "cabin": "economy",
+          "refundability": "refundable",
+          "change_fee": 0
+        },
+        "price": {
+          "total": 1400.0,
+          "base_fare": 1100.0,
+          "taxes": 180.0,
+          "carrier_fees": 120.0,
+          "ancillaries": 0.0
+        },
+        "currency": "USD"
+      },
+      "expected": {
+        "verdict": "BLOCK",
+        "corrections": [
+          {
+            "dimension": "price",
+            "action": "reduce_total"
+          }
+        ],
+        "failing_codes_reference_only": [
+          "PRICE_OVER_CEILING"
+        ],
+        "max_attempts": 3
+      }
+    },
+    {
+      "id": "V12",
+      "kind": "reservation",
+      "description": "Conforming reservation inside the time tolerance",
+      "mandate": {
+        "user_id": "user-123",
+        "service_description": "Dinner reservation for four",
+        "provider_name": "Chez Nous",
+        "location": {
+          "name": "Chez Nous Downtown",
+          "city": "San Francisco"
+        },
+        "date": "2026-12-10",
+        "time": "19:00",
+        "time_tolerance_minutes": 15,
+        "party_size": 4,
+        "party_size_max": 6,
+        "name_on_reservation": "Arash Tadi",
+        "max_deposit": 50,
+        "max_total_price": 300,
+        "cancellation": {
+          "free_until_hours_before": 24,
+          "max_cancellation_fee": 25
+        },
+        "expires_at": "2027-01-01T00:00:00Z"
+      },
+      "subject": {
+        "merchant": {
+          "name": "ResPlatform",
+          "domain": "res.example.com"
+        },
+        "provider_name": "Chez Nous",
+        "location": {
+          "name": "Chez Nous Downtown",
+          "city": "San Francisco"
+        },
+        "date": "2026-12-10",
+        "time": "19:10",
+        "party_size": 4,
+        "name_on_reservation": "Arash Tadi",
+        "deposit_amount": 25.0,
+        "total_amount": 180.0,
+        "currency": "USD",
+        "cancellation": {
+          "free_cancellation_hours_before": 48,
+          "cancellation_fee": 0.0
+        }
+      },
+      "expected": {
+        "verdict": "MATCH",
+        "corrections": [],
+        "failing_codes_reference_only": [],
+        "max_attempts": null
+      }
+    },
+    {
+      "id": "V13",
+      "kind": "reservation",
+      "description": "Start time outside the stated tolerance",
+      "mandate": {
+        "user_id": "user-123",
+        "service_description": "Dinner reservation for four",
+        "provider_name": "Chez Nous",
+        "location": {
+          "name": "Chez Nous Downtown",
+          "city": "San Francisco"
+        },
+        "date": "2026-12-10",
+        "time": "19:00",
+        "time_tolerance_minutes": 15,
+        "party_size": 4,
+        "party_size_max": 6,
+        "name_on_reservation": "Arash Tadi",
+        "max_deposit": 50,
+        "max_total_price": 300,
+        "cancellation": {
+          "free_until_hours_before": 24,
+          "max_cancellation_fee": 25
+        },
+        "expires_at": "2027-01-01T00:00:00Z"
+      },
+      "subject": {
+        "merchant": {
+          "name": "ResPlatform",
+          "domain": "res.example.com"
+        },
+        "provider_name": "Chez Nous",
+        "location": {
+          "name": "Chez Nous Downtown",
+          "city": "San Francisco"
+        },
+        "date": "2026-12-10",
+        "time": "19:45",
+        "party_size": 4,
+        "name_on_reservation": "Arash Tadi",
+        "deposit_amount": 25.0,
+        "total_amount": 180.0,
+        "currency": "USD",
+        "cancellation": {
+          "free_cancellation_hours_before": 48,
+          "cancellation_fee": 0.0
+        }
+      },
+      "expected": {
+        "verdict": "BLOCK",
+        "corrections": [
+          {
+            "dimension": "reservation_time",
+            "action": "change_time"
+          }
+        ],
+        "failing_codes_reference_only": [
+          "TIME_OUTSIDE_TOLERANCE"
+        ],
+        "max_attempts": 3
+      }
+    },
+    {
+      "id": "V14",
+      "kind": "reservation",
+      "description": "Name on the reservation has a one-letter typo",
+      "mandate": {
+        "user_id": "user-123",
+        "service_description": "Dinner reservation for four",
+        "provider_name": "Chez Nous",
+        "location": {
+          "name": "Chez Nous Downtown",
+          "city": "San Francisco"
+        },
+        "date": "2026-12-10",
+        "time": "19:00",
+        "time_tolerance_minutes": 15,
+        "party_size": 4,
+        "party_size_max": 6,
+        "name_on_reservation": "Arash Tadi",
+        "max_deposit": 50,
+        "max_total_price": 300,
+        "cancellation": {
+          "free_until_hours_before": 24,
+          "max_cancellation_fee": 25
+        },
+        "expires_at": "2027-01-01T00:00:00Z"
+      },
+      "subject": {
+        "merchant": {
+          "name": "ResPlatform",
+          "domain": "res.example.com"
+        },
+        "provider_name": "Chez Nous",
+        "location": {
+          "name": "Chez Nous Downtown",
+          "city": "San Francisco"
+        },
+        "date": "2026-12-10",
+        "time": "19:10",
+        "party_size": 4,
+        "name_on_reservation": "Arash Taddi",
+        "deposit_amount": 25.0,
+        "total_amount": 180.0,
+        "currency": "USD",
+        "cancellation": {
+          "free_cancellation_hours_before": 48,
+          "cancellation_fee": 0.0
+        }
+      },
+      "expected": {
+        "verdict": "REVIEW",
+        "corrections": [
+          {
+            "dimension": "reservation_name",
+            "action": "correct_reservation_name"
+          }
+        ],
+        "failing_codes_reference_only": [
+          "RESERVATION_NAME_FORM_DIFFERENCE"
+        ],
+        "max_attempts": 3
+      }
+    },
+    {
+      "id": "V15",
+      "kind": "reservation",
+      "description": "Party size below the instructed party size",
+      "mandate": {
+        "user_id": "user-123",
+        "service_description": "Dinner reservation for four",
+        "provider_name": "Chez Nous",
+        "location": {
+          "name": "Chez Nous Downtown",
+          "city": "San Francisco"
+        },
+        "date": "2026-12-10",
+        "time": "19:00",
+        "time_tolerance_minutes": 15,
+        "party_size": 4,
+        "party_size_max": 6,
+        "name_on_reservation": "Arash Tadi",
+        "max_deposit": 50,
+        "max_total_price": 300,
+        "cancellation": {
+          "free_until_hours_before": 24,
+          "max_cancellation_fee": 25
+        },
+        "expires_at": "2027-01-01T00:00:00Z"
+      },
+      "subject": {
+        "merchant": {
+          "name": "ResPlatform",
+          "domain": "res.example.com"
+        },
+        "provider_name": "Chez Nous",
+        "location": {
+          "name": "Chez Nous Downtown",
+          "city": "San Francisco"
+        },
+        "date": "2026-12-10",
+        "time": "19:10",
+        "party_size": 2,
+        "name_on_reservation": "Arash Tadi",
+        "deposit_amount": 25.0,
+        "total_amount": 180.0,
+        "currency": "USD",
+        "cancellation": {
+          "free_cancellation_hours_before": 48,
+          "cancellation_fee": 0.0
+        }
+      },
+      "expected": {
+        "verdict": "BLOCK",
+        "corrections": [
+          {
+            "dimension": "party_size",
+            "action": "change_party_size"
+          }
+        ],
+        "failing_codes_reference_only": [
+          "PARTY_SIZE_TOO_SMALL"
+        ],
+        "max_attempts": 3
+      }
+    }
+  ]
+}

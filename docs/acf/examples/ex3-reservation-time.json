@@ -1,0 +1,197 @@
+{
+  "about": "Captured from the reference implementation (ProveCart verification API, production code) running on a local test instance, 2026-11-05. Mandate ids, record ids and tokens are from that test instance; shapes, codes and correction payloads are the live format.",
+  "mandate_request": {
+    "user_id": "user-123",
+    "service_description": "Dinner reservation for four",
+    "provider_name": "Chez Nous",
+    "location": {
+      "name": "Chez Nous Downtown",
+      "city": "San Francisco"
+    },
+    "date": "2026-12-10",
+    "time": "19:00",
+    "time_tolerance_minutes": 15,
+    "party_size": 4,
+    "party_size_max": 6,
+    "name_on_reservation": "Arash Tadi",
+    "max_deposit": 50,
+    "max_total_price": 300,
+    "cancellation": {
+      "free_until_hours_before": 24,
+      "max_cancellation_fee": 25
+    },
+    "expires_at": "2026-11-12T00:54:42.332564Z"
+  },
+  "subject": {
+    "merchant": {
+      "name": "ResPlatform",
+      "domain": "res.example.com"
+    },
+    "provider_name": "Chez Nous",
+    "location": {
+      "name": "Chez Nous Downtown",
+      "city": "San Francisco"
+    },
+    "date": "2026-12-10",
+    "time": "19:45",
+    "party_size": 4,
+    "name_on_reservation": "Arash Tadi",
+    "deposit_amount": 25.0,
+    "total_amount": 180.0,
+    "currency": "USD",
+    "cancellation": {
+      "free_cancellation_hours_before": 48,
+      "cancellation_fee": 0.0
+    }
+  },
+  "response": {
+    "verdict": "BLOCK",
+    "results": [
+      {
+        "dimension": "mandate_signature",
+        "status": "pass",
+        "reasons": [
+          "mandate signature valid"
+        ],
+        "code": "MANDATE_SIGNATURE_VALID"
+      },
+      {
+        "dimension": "mandate_expiry",
+        "status": "pass",
+        "reasons": [
+          "mandate valid until 2026-11-12T00:54:42.332564Z"
+        ],
+        "code": "MANDATE_VALID"
+      },
+      {
+        "dimension": "merchant",
+        "status": "pass",
+        "reasons": [
+          "no merchant list restriction violated"
+        ],
+        "code": "MERCHANT_OK"
+      },
+      {
+        "dimension": "provider",
+        "status": "pass",
+        "reasons": [
+          "provider 'Chez Nous' matches the mandated 'Chez Nous'"
+        ],
+        "code": "PROVIDER_MATCH"
+      },
+      {
+        "dimension": "location",
+        "status": "pass",
+        "reasons": [
+          "location is consistent with the mandate"
+        ],
+        "code": "LOCATION_MATCH"
+      },
+      {
+        "dimension": "reservation_date",
+        "status": "pass",
+        "reasons": [
+          "reservation date 2026-12-10 matches the mandate"
+        ],
+        "code": "DATE_MATCH"
+      },
+      {
+        "dimension": "reservation_time",
+        "status": "hard_fail",
+        "reasons": [
+          "reservation time 19:45 is 45 minutes from mandated 19:00; tolerance is 15"
+        ],
+        "code": "TIME_OUTSIDE_TOLERANCE",
+        "details": {
+          "issues": [
+            {
+              "action": "change_time",
+              "field": "time",
+              "expected": "19:00 \u00b115 min",
+              "actual": "19:45"
+            }
+          ]
+        }
+      },
+      {
+        "dimension": "party_size",
+        "status": "pass",
+        "reasons": [
+          "party size 4 matches the mandate"
+        ],
+        "code": "PARTY_SIZE_MATCH"
+      },
+      {
+        "dimension": "reservation_name",
+        "status": "pass",
+        "reasons": [
+          "name on the reservation matches the mandate"
+        ],
+        "code": "RESERVATION_NAME_MATCH"
+      },
+      {
+        "dimension": "deposit",
+        "status": "pass",
+        "reasons": [
+          "deposit 25.0 is within the mandate's maximum 50.0"
+        ],
+        "code": "DEPOSIT_WITHIN_LIMIT"
+      },
+      {
+        "dimension": "price",
+        "status": "pass",
+        "reasons": [
+          "reservation total 180.0 is within the ceiling 300.0 USD"
+        ],
+        "code": "PRICE_WITHIN_CEILING",
+        "details": {
+          "total_incl_tax_fees": 180.0,
+          "compared_figure": 180.0,
+          "ceiling": 300.0
+        }
+      },
+      {
+        "dimension": "cancellation_terms",
+        "status": "pass",
+        "reasons": [
+          "free cancellation until 48h before meets the mandate (24h)",
+          "cancellation fee 0.0 is within the mandate's maximum 25"
+        ],
+        "code": "CANCELLATION_TERMS_OK"
+      },
+      {
+        "dimension": "currency",
+        "status": "pass",
+        "reasons": [
+          "currency matches mandate"
+        ],
+        "code": "CURRENCY_MATCH"
+      }
+    ],
+    "verdict_token": "eyJhbW91bnQiOjE4MC4wLCJjYXJ0X2hhc2giOiI4ZDAyNzU4MDM4MGQ1ODg0ZTY3NjY1YWQ1Nzc5MTE4NmE0NDlkZWYzZjE2NDFjZGM0NjEzNmQzMzhjZjVhZGNjIiwiY3VycmVuY3kiOiJVU0QiLCJleHBpcmVzX2F0IjoiMjAyNi0xMS0wNVQwMTowOTo0My45NzUzODJaIiwiaXNzdWVkX2F0IjoiMjAyNi0xMS0wNVQwMDo1NDo0My45NzUzODJaIiwibWFuZGF0ZV9pZCI6IjM0Yjc5ZTAyLTA1MzQtNGVjOC1hNGZlLTMwM2MzY2EyMzZhNSIsInJlY29yZF9pZCI6IjZhMDg3ODkwLTBlNTAtNDgxNy05MWUxLTEzN2Q5ZTcxMjdmNCIsInZlcmRpY3QiOiJCTE9DSyJ9.d217b902beee0c55265034632b58e00966f093460f8361207db1f79b7dfd3237",
+    "record_id": "6a087890-0e50-4817-91e1-137d9e7127f4",
+    "cart_hash": "8d027580380d5884e67665ad57791186a449def3f1641cdc46136d338cf5adcc",
+    "policy": {
+      "fail_safe": true
+    },
+    "corrections": [
+      {
+        "dimension": "reservation_time",
+        "action": "change_time",
+        "reason": "reservation time 19:45 is 45 minutes from mandated 19:00; tolerance is 15",
+        "expected": "19:00 \u00b115 min",
+        "actual": "19:45",
+        "field": "time"
+      }
+    ],
+    "max_attempts": 3,
+    "gates": {
+      "payment_capture": "deny",
+      "confirmation": "deny"
+    },
+    "agent_notice": "Help for this agent: agents that practice on ProveCart's free exam catch mistakes like this before a purchase is stopped, so their buyers get a smoother checkout. Free practice and certification: https://provecart.com/agents",
+    "links": {
+      "certification": "https://provecart.com/agents"
+    }
+  }
+}

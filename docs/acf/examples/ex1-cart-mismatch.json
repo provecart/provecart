@@ -1,0 +1,189 @@
+{
+  "about": "Captured from the reference implementation (ProveCart verification API, production code) running on a local test instance, 2026-11-05. Mandate ids, record ids and tokens are from that test instance; shapes, codes and correction payloads are the live format.",
+  "mandate_request": {
+    "user_id": "user-123",
+    "item_description": "Sony WH-1000XM5 wireless noise cancelling headphones",
+    "item_keywords": [
+      "sony",
+      "wh-1000xm5",
+      "wireless",
+      "headphones",
+      "noise",
+      "cancelling"
+    ],
+    "brand": "Sony",
+    "category": "electronics",
+    "max_total_price": 300.0,
+    "currency": "USD",
+    "merchant_allowlist": [
+      "shop.example.com"
+    ],
+    "max_quantity": 1,
+    "expires_at": "2026-11-12T00:54:42.332564Z"
+  },
+  "subject": {
+    "merchant": {
+      "name": "Example Shop",
+      "domain": "shop.example.com"
+    },
+    "items": [
+      {
+        "name": "BassPro Q9 Wireless Headphones",
+        "variant": null,
+        "quantity": 2,
+        "unit_price": 189.0
+      }
+    ],
+    "total_price": 378.0,
+    "currency": "USD"
+  },
+  "response": {
+    "verdict": "BLOCK",
+    "results": [
+      {
+        "dimension": "mandate_signature",
+        "status": "pass",
+        "reasons": [
+          "mandate signature valid"
+        ],
+        "code": "MANDATE_SIGNATURE_VALID",
+        "severity": "pass"
+      },
+      {
+        "dimension": "mandate_expiry",
+        "status": "pass",
+        "reasons": [
+          "mandate valid until 2026-11-12T00:54:42.332564Z"
+        ],
+        "code": "MANDATE_VALID",
+        "severity": "pass"
+      },
+      {
+        "dimension": "merchant",
+        "status": "pass",
+        "reasons": [
+          "merchant is on the mandate allowlist"
+        ],
+        "code": "MERCHANT_OK",
+        "severity": "pass"
+      },
+      {
+        "dimension": "price",
+        "status": "hard_fail",
+        "reasons": [
+          "total on the mandate basis (grand_total) exceeds the ceiling: compared figure 378.0 (merchandise 378.0 + tax 0.0 + shipping 0.0 + fees 0.0 = 378.0) vs ceiling 300.0 USD."
+        ],
+        "code": "PRICE_OVER_CEILING",
+        "details": {
+          "merchandise_total": 378.0,
+          "tax": 0.0,
+          "shipping": 0.0,
+          "fees": 0.0,
+          "total_incl_tax_fees": 378.0,
+          "stated_total": 378.0,
+          "basis": "grand_total",
+          "compared_figure": 378.0,
+          "ceiling": 300.0
+        },
+        "severity": "hard"
+      },
+      {
+        "dimension": "currency",
+        "status": "pass",
+        "reasons": [
+          "currency matches mandate"
+        ],
+        "code": "CURRENCY_MATCH",
+        "severity": "pass"
+      },
+      {
+        "dimension": "quantity",
+        "status": "soft_fail",
+        "reasons": [
+          "total quantity 2 exceeds mandate max_quantity 1"
+        ],
+        "code": "QUANTITY_OVER_MAX",
+        "severity": "soft"
+      },
+      {
+        "dimension": "item_match",
+        "status": "soft_fail",
+        "reasons": [
+          "item conformity is indeterminate or partial for: BassPro Q9 Wireless Headphones (coverage in the indeterminate band routes to REVIEW)"
+        ],
+        "code": "ITEM_INDETERMINATE",
+        "details": {
+          "per_item": [
+            {
+              "name": "BassPro Q9 Wireless Headphones",
+              "coverage": 0.444,
+              "jaccard": 0.364,
+              "band": "indeterminate",
+              "accessory": false
+            }
+          ]
+        },
+        "severity": "soft"
+      },
+      {
+        "dimension": "brand",
+        "status": "pass",
+        "reasons": [
+          "no cart item is positively identified as a brand other than 'Sony'"
+        ],
+        "code": "BRAND_OK",
+        "severity": "pass"
+      },
+      {
+        "dimension": "category",
+        "status": "pass",
+        "reasons": [
+          "cart categories compatible with mandate category 'electronics'"
+        ],
+        "code": "CATEGORY_OK",
+        "details": {
+          "mandate_category": "electronics",
+          "item_categories": {
+            "BassPro Q9 Wireless Headphones": "audio"
+          }
+        },
+        "severity": "pass"
+      }
+    ],
+    "verdict_token": "eyJhbW91bnQiOjM3OC4wLCJjYXJ0X2hhc2giOiI3OGUzZmI2NTVjMjVhYzJmZDQ5MTg1N2Q2MjM4OTZiZmUxZmYwNGJiYzdhMzM3MmI2YWY2NGQyNzM0Mjg2ZmQyIiwiY3VycmVuY3kiOiJVU0QiLCJleHBpcmVzX2F0IjoiMjAyNi0xMS0wNVQwMTowOTo0My45NDgxNzZaIiwiaXNzdWVkX2F0IjoiMjAyNi0xMS0wNVQwMDo1NDo0My45NDgxNzZaIiwibWFuZGF0ZV9pZCI6ImJiODUyZmNiLTE0ZjYtNDExNy1iYjYxLWY0OTQzNmNjOWE2NSIsInJlY29yZF9pZCI6ImIyYTNjYzFlLTE3NmItNDI1YS05YzlkLTdiYTEzNTU4ZjliYyIsInZlcmRpY3QiOiJCTE9DSyJ9.e05b4fc90272b8943d8328763cc66605da21b33d01adaa8650245400e37b5791",
+    "record_id": "b2a3cc1e-176b-425a-9c9d-7ba13558f9bc",
+    "cart_hash": "78e3fb655c25ac2fd491857d623896bfe1ff04bbc7a3372b6af64d2734286fd2",
+    "policy": {
+      "fail_safe": true
+    },
+    "corrections": [
+      {
+        "dimension": "price",
+        "action": "reduce_total",
+        "reason": "total on the mandate basis (grand_total) exceeds the ceiling: compared figure 378.0 (merchandise 378.0 + tax 0.0 + shipping 0.0 + fees 0.0 = 378.0) vs ceiling 300.0 USD.",
+        "expected": 300.0,
+        "actual": 378.0
+      },
+      {
+        "dimension": "quantity",
+        "action": "reduce_quantity",
+        "reason": "total quantity 2 exceeds mandate max_quantity 1",
+        "expected": 1,
+        "actual": 2
+      },
+      {
+        "dimension": "item_match",
+        "action": "replace_item",
+        "item": "BassPro Q9 Wireless Headphones",
+        "reason": "item conformity is indeterminate or partial for: BassPro Q9 Wireless Headphones (coverage in the indeterminate band routes to REVIEW)",
+        "expected": "Sony WH-1000XM5 wireless noise cancelling headphones",
+        "actual": "BassPro Q9 Wireless Headphones"
+      }
+    ],
+    "max_attempts": 3,
+    "agent_notice": "Help for this agent: agents that practice on ProveCart's free exam catch mistakes like this before a purchase is stopped, so their buyers get a smoother checkout. Free practice and certification: https://provecart.com/agents",
+    "links": {
+      "certification": "https://provecart.com/agents"
+    }
+  }
+}

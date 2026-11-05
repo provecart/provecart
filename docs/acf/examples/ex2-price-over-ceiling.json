@@ -1,0 +1,363 @@
+{
+  "about": "Captured from the reference implementation (ProveCart verification API, production code) running on a local test instance, 2026-11-05. Mandate ids, record ids and tokens are from that test instance; shapes, codes and correction payloads are the live format.",
+  "mandate_request": {
+    "user_id": "user-123",
+    "item_description": "Wireless noise cancelling over-ear headphones",
+    "item_keywords": [
+      "wireless",
+      "headphones",
+      "noise",
+      "cancelling"
+    ],
+    "category": "electronics",
+    "max_total_price": 300.0,
+    "currency": "USD",
+    "merchant_allowlist": [
+      "shop.example.com"
+    ],
+    "merchant_blocklist": [
+      "evil.example.com"
+    ],
+    "max_quantity": 1,
+    "expires_at": "2026-11-12T00:54:42.332564Z"
+  },
+  "subject": {
+    "merchant": {
+      "name": "Example Shop",
+      "domain": "shop.example.com"
+    },
+    "items": [
+      {
+        "name": "Wireless Noise-Cancelling Headphones",
+        "variant": "black",
+        "quantity": 1,
+        "unit_price": 349.99
+      }
+    ],
+    "total_price": 349.99,
+    "currency": "USD"
+  },
+  "response": {
+    "verdict": "BLOCK",
+    "results": [
+      {
+        "dimension": "mandate_signature",
+        "status": "pass",
+        "reasons": [
+          "mandate signature valid"
+        ],
+        "code": "MANDATE_SIGNATURE_VALID",
+        "severity": "pass"
+      },
+      {
+        "dimension": "mandate_expiry",
+        "status": "pass",
+        "reasons": [
+          "mandate valid until 2026-11-12T00:54:42.332564Z"
+        ],
+        "code": "MANDATE_VALID",
+        "severity": "pass"
+      },
+      {
+        "dimension": "merchant",
+        "status": "pass",
+        "reasons": [
+          "merchant is on the mandate allowlist"
+        ],
+        "code": "MERCHANT_OK",
+        "severity": "pass"
+      },
+      {
+        "dimension": "price",
+        "status": "hard_fail",
+        "reasons": [
+          "total on the mandate basis (grand_total) exceeds the ceiling: compared figure 349.99 (merchandise 349.99 + tax 0.0 + shipping 0.0 + fees 0.0 = 349.99) vs ceiling 300.0 USD."
+        ],
+        "code": "PRICE_OVER_CEILING",
+        "details": {
+          "merchandise_total": 349.99,
+          "tax": 0.0,
+          "shipping": 0.0,
+          "fees": 0.0,
+          "total_incl_tax_fees": 349.99,
+          "stated_total": 349.99,
+          "basis": "grand_total",
+          "compared_figure": 349.99,
+          "ceiling": 300.0
+        },
+        "severity": "hard"
+      },
+      {
+        "dimension": "currency",
+        "status": "pass",
+        "reasons": [
+          "currency matches mandate"
+        ],
+        "code": "CURRENCY_MATCH",
+        "severity": "pass"
+      },
+      {
+        "dimension": "quantity",
+        "status": "pass",
+        "reasons": [
+          "total quantity 1 within max 1"
+        ],
+        "code": "QUANTITY_WITHIN_MAX",
+        "severity": "pass"
+      },
+      {
+        "dimension": "item_match",
+        "status": "pass",
+        "reasons": [
+          "all cart items are strong matches for the mandate item specification (coverage 75%)"
+        ],
+        "code": "ITEM_MATCH",
+        "details": {
+          "per_item": [
+            {
+              "name": "Wireless Noise-Cancelling Headphones",
+              "coverage": 0.75,
+              "jaccard": 0.667,
+              "band": "strong",
+              "accessory": false
+            }
+          ]
+        },
+        "severity": "pass"
+      },
+      {
+        "dimension": "category",
+        "status": "pass",
+        "reasons": [
+          "cart categories compatible with mandate category 'electronics'"
+        ],
+        "code": "CATEGORY_OK",
+        "details": {
+          "mandate_category": "electronics",
+          "item_categories": {
+            "Wireless Noise-Cancelling Headphones": "audio"
+          }
+        },
+        "severity": "pass"
+      }
+    ],
+    "verdict_token": "eyJhbW91bnQiOjM0OS45OSwiY2FydF9oYXNoIjoiMzU3M2VhYWZkNjk5NmMxNWUwYmI4M2Q2ZDkyMTIzMTgwODExY2VlZDJjNGJmOTdhY2EwZTdmYTYwZTNmZGE3OSIsImN1cnJlbmN5IjoiVVNEIiwiZXhwaXJlc19hdCI6IjIwMjYtMTEtMDVUMDE6MDk6NDMuOTYxMzUwWiIsImlzc3VlZF9hdCI6IjIwMjYtMTEtMDVUMDA6NTQ6NDMuOTYxMzUwWiIsIm1hbmRhdGVfaWQiOiIzODU4NGY4MC1kYjNjLTRiMDMtOWViNi05MDYzMmMyNWJmYTAiLCJyZWNvcmRfaWQiOiI5ODk4MTlhZC0wODYwLTQ3OTctYWUzOC03MGZjN2QzMTBmNWEiLCJ2ZXJkaWN0IjoiQkxPQ0sifQ.d9f655db1bd3fe7f8a2ca387e77f309dc3b7d73feebcae435fdf71c465f3ab7f",
+    "record_id": "989819ad-0860-4797-ae38-70fc7d310f5a",
+    "cart_hash": "3573eaafd6996c15e0bb83d6d92123180811ceed2c4bf97aca0e7fa60e3fda79",
+    "policy": {
+      "fail_safe": true
+    },
+    "corrections": [
+      {
+        "dimension": "price",
+        "action": "reduce_total",
+        "reason": "total on the mandate basis (grand_total) exceeds the ceiling: compared figure 349.99 (merchandise 349.99 + tax 0.0 + shipping 0.0 + fees 0.0 = 349.99) vs ceiling 300.0 USD.",
+        "expected": 300.0,
+        "actual": 349.99
+      }
+    ],
+    "max_attempts": 3,
+    "agent_notice": "Help for this agent: agents that practice on ProveCart's free exam catch mistakes like this before a purchase is stopped, so their buyers get a smoother checkout. Free practice and certification: https://provecart.com/agents",
+    "links": {
+      "certification": "https://provecart.com/agents"
+    }
+  },
+  "sealed_record_fetch": {
+    "request": "GET /records/989819ad-0860-4797-ae38-70fc7d310f5a",
+    "status": 200,
+    "response": {
+      "kind": "verification",
+      "timestamp": "2026-11-05T00:54:43.961350Z",
+      "mandate_id": "38584f80-db3c-4b03-9eb6-90632c25bfa0",
+      "mandate": {
+        "id": "38584f80-db3c-4b03-9eb6-90632c25bfa0",
+        "kind": "cart",
+        "user_id": "user-123",
+        "item_description": "Wireless noise cancelling over-ear headphones",
+        "item_keywords": [
+          "wireless",
+          "headphones",
+          "noise",
+          "cancelling"
+        ],
+        "category": "electronics",
+        "max_total_price": 300.0,
+        "currency": "USD",
+        "merchant_allowlist": [
+          "shop.example.com"
+        ],
+        "merchant_blocklist": [
+          "evil.example.com"
+        ],
+        "max_quantity": 1,
+        "expires_at": "2026-11-12T00:54:42.332564Z",
+        "created_at": "2026-11-05T00:54:43.952980Z",
+        "brand": null,
+        "category_required": false,
+        "variant_constraints": null,
+        "price_basis": "grand_total",
+        "type": "single_purchase",
+        "period_budget": null,
+        "period_start": null,
+        "period_end": null,
+        "signature": "336f82fdbadb6454abd93fb80b23436424d8e3bdac1adeeb99c26a70b8224de5"
+      },
+      "cart": {
+        "mandate_id": "38584f80-db3c-4b03-9eb6-90632c25bfa0",
+        "merchant": {
+          "name": "Example Shop",
+          "domain": "shop.example.com"
+        },
+        "items": [
+          {
+            "name": "Wireless Noise-Cancelling Headphones",
+            "variant": "black",
+            "quantity": 1,
+            "unit_price": 349.99,
+            "category": null,
+            "brand": null
+          }
+        ],
+        "total_price": 349.99,
+        "currency": "USD",
+        "tax": 0.0,
+        "shipping": 0.0,
+        "fees": 0.0,
+        "previous_record_id": null,
+        "cart_changed": false
+      },
+      "results": [
+        {
+          "dimension": "mandate_signature",
+          "status": "pass",
+          "reasons": [
+            "mandate signature valid"
+          ],
+          "code": "MANDATE_SIGNATURE_VALID",
+          "severity": "pass"
+        },
+        {
+          "dimension": "mandate_expiry",
+          "status": "pass",
+          "reasons": [
+            "mandate valid until 2026-11-12T00:54:42.332564Z"
+          ],
+          "code": "MANDATE_VALID",
+          "severity": "pass"
+        },
+        {
+          "dimension": "merchant",
+          "status": "pass",
+          "reasons": [
+            "merchant is on the mandate allowlist"
+          ],
+          "code": "MERCHANT_OK",
+          "severity": "pass"
+        },
+        {
+          "dimension": "price",
+          "status": "hard_fail",
+          "reasons": [
+            "total on the mandate basis (grand_total) exceeds the ceiling: compared figure 349.99 (merchandise 349.99 + tax 0.0 + shipping 0.0 + fees 0.0 = 349.99) vs ceiling 300.0 USD."
+          ],
+          "code": "PRICE_OVER_CEILING",
+          "details": {
+            "merchandise_total": 349.99,
+            "tax": 0.0,
+            "shipping": 0.0,
+            "fees": 0.0,
+            "total_incl_tax_fees": 349.99,
+            "stated_total": 349.99,
+            "basis": "grand_total",
+            "compared_figure": 349.99,
+            "ceiling": 300.0
+          },
+          "severity": "hard"
+        },
+        {
+          "dimension": "currency",
+          "status": "pass",
+          "reasons": [
+            "currency matches mandate"
+          ],
+          "code": "CURRENCY_MATCH",
+          "severity": "pass"
+        },
+        {
+          "dimension": "quantity",
+          "status": "pass",
+          "reasons": [
+            "total quantity 1 within max 1"
+          ],
+          "code": "QUANTITY_WITHIN_MAX",
+          "severity": "pass"
+        },
+        {
+          "dimension": "item_match",
+          "status": "pass",
+          "reasons": [
+            "all cart items are strong matches for the mandate item specification (coverage 75%)"
+          ],
+          "code": "ITEM_MATCH",
+          "details": {
+            "per_item": [
+              {
+                "name": "Wireless Noise-Cancelling Headphones",
+                "coverage": 0.75,
+                "jaccard": 0.667,
+                "band": "strong",
+                "accessory": false
+              }
+            ]
+          },
+          "severity": "pass"
+        },
+        {
+          "dimension": "category",
+          "status": "pass",
+          "reasons": [
+            "cart categories compatible with mandate category 'electronics'"
+          ],
+          "code": "CATEGORY_OK",
+          "details": {
+            "mandate_category": "electronics",
+            "item_categories": {
+              "Wireless Noise-Cancelling Headphones": "audio"
+            }
+          },
+          "severity": "pass"
+        }
+      ],
+      "verdict": "BLOCK",
+      "cart_hash": "3573eaafd6996c15e0bb83d6d92123180811ceed2c4bf97aca0e7fa60e3fda79",
+      "totals": {
+        "merchandise_total": 349.99,
+        "tax": 0.0,
+        "shipping": 0.0,
+        "fees": 0.0,
+        "total_incl_tax_fees": 349.99,
+        "stated_total": 349.99
+      },
+      "supersedes": null,
+      "cart_changed": false,
+      "submitted_by": "acf-pack",
+      "api_key_id": "cdfeec11-b576-4293-820f-740b6d810d80",
+      "policy": {
+        "fail_safe": true
+      },
+      "corrections": [
+        {
+          "dimension": "price",
+          "action": "reduce_total",
+          "reason": "total on the mandate basis (grand_total) exceeds the ceiling: compared figure 349.99 (merchandise 349.99 + tax 0.0 + shipping 0.0 + fees 0.0 = 349.99) vs ceiling 300.0 USD.",
+          "expected": 300.0,
+          "actual": 349.99
+        }
+      ],
+      "record_id": "989819ad-0860-4797-ae38-70fc7d310f5a",
+      "seq": 2,
+      "prev_hash": "7ec3d98140844012d7ceb375312fefb4ff7f31cbf140bda077bede4e9ee62870",
+      "hash": "ec476af8dbe68bae0715fd12b44e1817a8f18b81c44c9a7c6c00c304ed2f6768"
+    }
+  }
+}
