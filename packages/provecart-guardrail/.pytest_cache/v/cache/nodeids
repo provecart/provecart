@@ -1,0 +1,15 @@
+[
+  "tests/test_guardrail.py::test_block_fixable_no_trip_with_auto_fix",
+  "tests/test_guardrail.py::test_block_fixable_trips_by_default_and_surfaces_corrections",
+  "tests/test_guardrail.py::test_block_unfixable_trips_even_with_auto_fix",
+  "tests/test_guardrail.py::test_callable_client_and_verify_cart_adapter",
+  "tests/test_guardrail.py::test_match_proceeds",
+  "tests/test_guardrail.py::test_mock_default_is_offline_fake",
+  "tests/test_guardrail.py::test_output_shape",
+  "tests/test_guardrail.py::test_review_trips",
+  "tests/test_guardrail.py::test_unknown_verdict_escalates",
+  "tests/test_guardrail.py::test_unlisted_tool_skips_check",
+  "tests/test_sdk_integration.py::test_output_is_real_sdk_type",
+  "tests/test_sdk_integration.py::test_tool_input_guardrail_adapter",
+  "tests/test_sdk_integration.py::test_wraps_as_output_guardrail"
+]
