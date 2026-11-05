@@ -1,0 +1,10 @@
+{
+  "project_slug": "my-shopping-agent",
+  "agent_name": "My Shopping Agent",
+  "provider": [
+    "openai",
+    "anthropic"
+  ],
+  "use_mcp": false,
+  "_copy_without_render": []
+}
